@@ -1,6 +1,5 @@
 // 1) створити інтерфейс на основі цього объекта:
 // Зверніть увагу там де масиви... в них може бути багато однотипних обїектів
-
 interface IProperty {
     mission_name: string;
     launch_date_local: string;
@@ -16,31 +15,28 @@ interface IProperty {
 
 interface IRocket {
     rocket_name: string;
-    first_stage: IFirst_stage;
-    second_stage: ISecond_stage;
+    first_stage: {
+        cores: ICore[]
+    },
+    second_stage: {
+        payloads: IPayloads[]
+    }
 }
 
-interface IFirst_stage {
-    cores: [
-        {
-            flight: number,
-            core: {
-                reuse_count: number,
-                status: string
-            }
-        }
-    ]
+interface ICore {
+    flight: number,
+    core: {
+        reuse_count: number,
+        status: string
+    }
 }
 
-interface ISecond_stage {
-    payloads: [
-        {
-            payload_type: string;
-            payload_mass_kg: number;
-            payload_mass_lbs: number;
-        }
-    ]
+interface IPayloads {
+    payload_type: string;
+    payload_mass_kg: number;
+    payload_mass_lbs: number;
 }
+
 
 const property: IProperty = {
     mission_name: "Starlink-15 (v1.0)",
@@ -56,33 +52,39 @@ const property: IProperty = {
         rocket_name: "Falcon 9",
         first_stage: {
             cores: [
-                        {
-                            flight: 7,
-                            core: {
-                                reuse_count: 6,
-                                status: 'unknown'
-                            }
-                        }
-                        ]
+                {
+                    flight: 7,
+                    core: {
+                        reuse_count: 6,
+                        status: 'unknown'
+                    }
+                }
+            ]
         },
         second_stage: {
             payloads: [
-                    {
-                        payload_type: 'Satellite',
-                        payload_mass_kg: 15400,
-                        payload_mass_lbs: 33951.2
-                    }
-                    ]
+                {
+                    payload_type: 'Satellite',
+                    payload_mass_kg: 15400,
+                    payload_mass_lbs: 33951.2
+                }
+            ]
         }
     }
 }
 
-console.log(property);
+console.dir(property, { depth: 50 });
 
 //---------------------------------------------------------------------------—————————
 // 2) протипізувати функції:
 
-const user: {name: string, age: number, gender: string} = {
+interface IUser {
+    name: string,
+    age: number,
+    gender: string
+}
+
+const user: IUser = {
     name: "Max",
     age: 18,
     gender: 'male'
@@ -96,11 +98,11 @@ const showSum = (a: number, b: number): void => {
     console.log(a + b);
 }
 
-const incAge = (someUser: any, inc: number): object => {
+const incAge = (someUser: IUser, inc: number): IUser => {
     someUser.age += inc;
     return someUser;
 }
 
 console.log(sum(1, 2));
-showSum(2,3)
+showSum(2,3);
 console.log(incAge(user, 2));
